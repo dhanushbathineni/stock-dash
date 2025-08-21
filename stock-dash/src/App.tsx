@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import  { useEffect, useMemo, useRef, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Search, RefreshCw, Plus, Trash2 } from "lucide-react";
 
@@ -58,7 +58,7 @@ function generateMockCandles(symbol: string): CandlePoint[] {
   return data;
 }
 
-async function fetchQuoteFinnhub(symbol: string, token: string): Promise<Quote> {
+async function fetchQuoteFinnhub(symbol: string): Promise<Quote> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
   
@@ -66,7 +66,7 @@ async function fetchQuoteFinnhub(symbol: string, token: string): Promise<Quote> 
   return generateMockPrice(symbol);
 }
 
-async function fetchDailyCandles(symbol: string, token: string): Promise<CandlePoint[]> {
+async function fetchDailyCandles(symbol: string): Promise<CandlePoint[]> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 500));
   
@@ -117,7 +117,7 @@ export default function StockDashboard() {
     setLoading(true);
     setErrors([]);
     try {
-      const results = await Promise.allSettled(symbols.map((sym) => fetchQuoteFinnhub(sym, apiKey)));
+      const results = await Promise.allSettled(symbols.map((sym) => fetchQuoteFinnhub(sym)));
       const ok: Quote[] = [];
       const errs: string[] = [];
       results.forEach((r, i) => {
@@ -151,7 +151,7 @@ export default function StockDashboard() {
       setChartLoading(true);
       setChartError(null);
       try {
-        const data = await fetchDailyCandles(selected, apiKey);
+        const data = await fetchDailyCandles(selected);
         setChartData(data);
       } catch (err: any) {
         setChartError(err?.message || "Failed to load chart");
